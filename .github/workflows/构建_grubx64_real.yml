@@ -28,7 +28,7 @@ jobs:
         sudo apt-get install gnu-efi
         sudo apt-get install libfile-slurp-perl
     
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: 克隆 efitools
       run: git clone https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git
     - name: 应用补丁
@@ -53,7 +53,7 @@ jobs:
         objcopy -j .text -j .sdata -j .data -j .dynamic -j .dynsym -j .rel -j .rela -j '.rel.*' -j '.rela.*' -j '.rel*' -j '.rela*' -j .reloc --target=efi-app-x86_64 PreLoader.so PreLoader.efi
         sudo mv ./PreLoader.efi ../${{ matrix.filename }}
     - name: 上传到此处
-      uses: actions/upload-artifact@v3.1.0
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.filename }}
         path: ./${{ matrix.filename }}
