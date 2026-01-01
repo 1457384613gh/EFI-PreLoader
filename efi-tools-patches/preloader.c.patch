@@ -9,6 +9,7 @@
 -CHAR16 *loader = L"loader.efi";
 -CHAR16 *hashtool = L"HashTool.efi";
 +CHAR16 *loader = L"..\\Yours\\Yours_x64.efi";
++CHAR16 *installation = L"installation.efi";
  
  EFI_STATUS
  efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
@@ -24,7 +25,13 @@
 -		goto start_hashtool;
 -
  	status = execute(image, loader);
- 
+
++  if (EFI_ERROR(status)) {
++   status = execute(image, installation);
++  }
++
++  return status;
+
  	if (status == EFI_SUCCESS)
 @@ -74,48 +64,6 @@
  		goto out;
