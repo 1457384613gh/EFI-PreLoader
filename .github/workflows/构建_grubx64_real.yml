@@ -20,7 +20,7 @@ jobs:
         filename: [grubx64_real.efi]
 
     name: 构建 PreLoader 链接到 ${{ matrix.target }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: 安装工具包
