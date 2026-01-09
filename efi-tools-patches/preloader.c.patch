@@ -1,42 +1,46 @@
---- a/efitools-1.9.2/PreLoader.c	2019-01-09 01:13:13.000000000 +0300
-+++ b/efitools-1.9.2/PreLoader.c	2019-02-25 05:24:46.808742187 +0300
-@@ -14,10 +14,7 @@
- #include <security_policy.h>
- #include <execute.h>
+--- PreLoader.c	2019-01-09 06:13:13.000000000 +0800
++++ PreLoader.b	2026-01-09 22:25:25.923840800 +0800
+@@ -16,8 +16,8 @@
  
--#include "hashlist.h"
--
+ #include "hashlist.h"
+ 
 -CHAR16 *loader = L"loader.efi";
 -CHAR16 *hashtool = L"HashTool.efi";
 +CHAR16 *loader = L"..\\Yours\\Yours_x64.efi";
-+CHAR16 *installation = L"installation.efi";
++CHAR16 *fallback = L"basic.efi";
  
  EFI_STATUS
  efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
-@@ -52,13 +49,6 @@
+@@ -52,70 +52,14 @@
  		goto override;
  	}
  
 -	/* install statically compiled in hashes */
 -	security_protocol_set_hashes(_tmp_tmp_hash, _tmp_tmp_hash_len);
--
++	if (EFI_ERROR(status)) {
++		status = execute(image, fallback);
++	}
+ 
 -	/* Check for H key being pressed */
 -	if (console_check_for_keystroke('H'))
 -		goto start_hashtool;
--
- 	status = execute(image, loader);
-
-+  if (EFI_ERROR(status)) {
-+   status = execute(image, installation);
-+  }
-+
-+  return status;
-
- 	if (status == EFI_SUCCESS)
-@@ -74,48 +64,6 @@
- 		goto out;
- 	}
++        return status;
  
+ 	status = execute(image, loader);
+ 
+-	if (status == EFI_SUCCESS)
+-		goto out;
+-
+-	if (status != EFI_SECURITY_VIOLATION && status != EFI_ACCESS_DENIED) {
+-		CHAR16 buf[256];
+-
+-		StrCpy(buf, L"Failed to start ");
+-		StrCat(buf, loader);
+-		console_error(buf, status);
+-
+-		goto out;
+-	}
+-
 -	console_alertbox((CHAR16 *[]) {
 -			L"Failed to start loader",
 -			L"",
@@ -82,3 +86,16 @@
   out:
  	status = security_policy_uninstall();
  	if (status != EFI_SUCCESS)
+@@ -126,11 +70,7 @@
+ 	status = execute(image, loader);
+ 	
+ 	if (status != EFI_SUCCESS) {
+-		CHAR16 buf[256];
+-
+-		StrCpy(buf, L"Failed to start ");
+-		StrCat(buf, loader);
+-		console_error(buf, status);
++		status = execute(image, fallback);
+ 	}
+ 
+ 	return status;
