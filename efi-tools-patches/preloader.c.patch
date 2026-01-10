@@ -1,9 +1,11 @@
---- PreLoader.c	2019-01-09 06:13:13.000000000 +0800
-+++ PreLoader.b	2026-01-09 22:25:25.923840800 +0800
-@@ -16,8 +16,8 @@
+--- PreLoader.ccc	2019-01-09 06:13:13.000000000 +0800
++++ PreLoader.c	2026-01-10 16:19:52.337565565 +0800
+@@ -14,10 +14,8 @@
+ #include <security_policy.h>
+ #include <execute.h>
  
- #include "hashlist.h"
- 
+-#include "hashlist.h"
+-
 -CHAR16 *loader = L"loader.efi";
 -CHAR16 *hashtool = L"HashTool.efi";
 +CHAR16 *loader = L"..\\Yours\\Yours_x64.efi";
@@ -11,7 +13,7 @@
  
  EFI_STATUS
  efi_main (EFI_HANDLE image, EFI_SYSTEM_TABLE *systab)
-@@ -52,70 +52,14 @@
+@@ -52,70 +50,14 @@
  		goto override;
  	}
  
@@ -86,7 +88,7 @@
   out:
  	status = security_policy_uninstall();
  	if (status != EFI_SUCCESS)
-@@ -126,11 +70,7 @@
+@@ -126,11 +68,7 @@
  	status = execute(image, loader);
  	
  	if (status != EFI_SUCCESS) {
