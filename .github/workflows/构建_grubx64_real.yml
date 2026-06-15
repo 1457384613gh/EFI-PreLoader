@@ -30,7 +30,7 @@ jobs:
     
     - uses: actions/checkout@v4
     - name: 克隆 efitools
-      run: git clone https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git
+      run: git clone https://github.com/pbatard/efitools.git
     - name: 应用补丁
       run: |
         sudo patch ./efitools/PreLoader.c ./efi-tools-patches/preloader.c.patch
